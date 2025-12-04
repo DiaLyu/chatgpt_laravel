@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ContentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -13,6 +14,14 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/admin/logout', [AdminController::class, 'AdminLogout'])->name('admin.logout');
+
+// Generate Content Route
+Route::get('/generate/main', [ContentController::class, 'GenerateContentMain'])->name('generate.main');
+Route::get('/add/content', [ContentController::class, 'AddContent'])->name('add.content');
+
+Route::controller(ContentController::class)->group(function(){
+    Route::post('/content/generate', 'generateContentNew');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
